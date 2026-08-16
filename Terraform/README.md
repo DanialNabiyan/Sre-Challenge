@@ -1,13 +1,13 @@
-# vSphere: 3x Ubuntu VMs from `packer-ubuntu-22.04`
+# vSphere: Vm provisioning using Terraform`
 
-Clones your Packer-built `packer-ubuntu-22.04` template into 3 VMs on a local vSphere/vCenter environment.
+Create vm using exist template. 
 
 ## Files
 
 - `versions.tf` – provider requirements + vSphere provider config
 - `variables.tf` – all configurable inputs
-- `main.tf` – data sources + `vsphere_virtual_machine` resources (count = 3)
-- `outputs.tf` – VM names, IPs, MOIDs
+- `main.tf` – data sources + `vsphere_virtual_machine` resources
+- `outputs.tf` – VM names, IPs
 - `terraform.tfvars.example` – copy to `terraform.tfvars` and fill in
 
 ## Prerequisites
@@ -27,7 +27,7 @@ terraform plan
 terraform apply
 ```
 
-This creates 3 VMs named `ubuntu-01`, `ubuntu-02`, `ubuntu-03` by default (change via `vm_name_prefix` / `vm_count`).
+This creates  VMs named `ubuntu-01`, `ubuntu-x` by default (change via `vm_name_prefix` / `vm_count`).
 
 ## Notes / things to adjust for your environment
 
@@ -38,5 +38,4 @@ This creates 3 VMs named `ubuntu-01`, `ubuntu-02`, `ubuntu-03` by default (chang
   ```
 - **Networking**: defaults to DHCP. For static IPs, set `use_dhcp = false` and provide `ip_addresses` (CIDR notation, one per VM) + `ipv4_gateway` in your tfvars.
 - **Disk size**: `disk_size_gb` must be >= the template's own disk size, or the clone will fail.
-- **Resource pool**: this uses the cluster's root resource pool. If you use a specific resource pool (not the cluster root), swap `data.vsphere_compute_cluster.cluster.resource_pool_id` for a `data "vsphere_resource_pool"` lookup instead.
 - **Folder**: leave `folder = ""` to place VMs at the datacenter root, or set a path like `"workloads/test"` (folder must already exist).
