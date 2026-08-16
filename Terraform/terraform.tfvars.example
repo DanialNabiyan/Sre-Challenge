@@ -1,0 +1,33 @@
+# Copy this file to terraform.tfvars and fill in your environment's values.
+# Do NOT commit terraform.tfvars (it will contain credentials) — add it to .gitignore.
+
+vsphere_user     = "administrator@vsphere.local"
+vsphere_password = "changeme"
+vsphere_server   = "vcenter.local.lab"
+
+vsphere_allow_unverified_ssl = true
+
+datacenter = "Datacenter1"
+cluster    = "Cluster1"
+datastore  = "datastore1"
+network    = "VM Network"
+folder     = "" # e.g. "workloads/test" — leave empty for root of datacenter
+
+template_name  = "packer-ubuntu-22.04"
+vm_count       = 3
+vm_name_prefix = "ubuntu"
+
+num_cpus     = 2
+memory       = 4096
+disk_size_gb = 40
+
+domain      = "local"
+dns_servers = ["8.8.8.8", "8.8.4.4"]
+
+# DHCP mode (default) - leave use_dhcp = true and ignore ip_addresses/ipv4_gateway
+use_dhcp = true
+
+# Static IP mode - set use_dhcp = false and fill these in (must match vm_count):
+# use_dhcp     = false
+# ip_addresses = ["192.168.1.101/24", "192.168.1.102/24", "192.168.1.103/24"]
+# ipv4_gateway = "192.168.1.1"
