@@ -11,3 +11,4 @@
 *.hcl
 
 venv/
+vault*
