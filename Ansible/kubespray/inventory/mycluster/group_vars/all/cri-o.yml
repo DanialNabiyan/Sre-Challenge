@@ -1,0 +1,27 @@
+# Registries defined within cri-o.
+crio_insecure_registries:
+  - docker.mci.dev
+
+crio_registries:
+  - prefix: docker.io
+    insecure: false
+    blocked: false
+    unqualified: true
+    location: docker.mci.dev
+  - prefix: quay.io
+    insecure: false
+    blocked: false
+    unqualified: true
+    location: docker.mci.dev/quay.io
+  - prefix: registry.k8s.io
+    insecure: false
+    blocked: false
+    unqualified: true
+    insecure_skip_verify: false
+    location: docker.mci.dev/registry.k8s.io
+  - prefix: k8s.gcr.io
+    insecure: false
+    blocked: false
+    unqualified: true
+    insecure_skip_verify: false
+    location: docker.mci.dev/k8s.gcr.io
