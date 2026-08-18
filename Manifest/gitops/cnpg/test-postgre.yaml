@@ -18,3 +18,14 @@ spec:
       memory: "4Gi"
   storage:
     size: 2Gi
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: cluster-postgre-monitor
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: cluster-postgre
+  podMetricsEndpoints:
+  - port: metrics
