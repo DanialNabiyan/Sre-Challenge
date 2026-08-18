@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-postgre
+  namespace: cnpg-system
+spec:
+  instances: 3
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "512MB"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  storage:
+    size: 2Gi
