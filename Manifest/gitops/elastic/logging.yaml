@@ -17,7 +17,7 @@ spec:
           - ml
           - ingest
         xpack.ml.enabled: true
-      count: 3
+      count: 1
       name: master
       podTemplate:
         spec:
