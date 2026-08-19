@@ -21,15 +21,6 @@ spec:
       name: master
       podTemplate:
         spec:
-          affinity:
-            podAntiAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - podAffinityTerm:
-                    labelSelector:
-                      matchLabels:
-                        elasticsearch.k8s.elastic.co/cluster-name: logging-es
-                    topologyKey: kubernetes.io/hostname
-                  weight: 100
           containers:
             - name: elasticsearch
               resources:
