@@ -1,0 +1,88 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: logging-es
+  namespace: logging
+spec:
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  image: docker.mci.dev/elasticsearch:8.18.6
+  nodeSets:
+    - config:
+        node.roles:
+          - master
+          - data
+          - ml
+          - ingest
+        xpack.ml.enabled: true
+      count: 3
+      name: master
+      podTemplate:
+        spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        elasticsearch.k8s.elastic.co/cluster-name: logging-es
+                    topologyKey: kubernetes.io/hostname
+                  weight: 100
+          containers:
+            - name: elasticsearch
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+                requests:
+                  cpu: "2"
+                  memory: 4Gi
+          initContainers:
+            - command:
+                - sh
+                - -c
+                - sysctl -w vm.max_map_count=262144
+              name: sysctl
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 500Mi
+                requests:
+                  cpu: 500m
+                  memory: 500Mi
+              securityContext:
+                privileged: true
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 30Gi
+  version: 8.18.6
+  volumeClaimDeletePolicy: DeleteOnScaledownOnly
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: logging-kibana
+  namespace: logging
+spec:
+  config:
+    monitoring.ui.ccs.enabled: "false"
+  count: 1
+  elasticsearchRef:
+    name: logging-es
+  http:
+    service:
+      spec:
+        type: ClusterIP
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  image: docker.mci.dev/kibana:8.18.6
+  version: 8.18.6
